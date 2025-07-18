@@ -17,17 +17,15 @@
 
 ## 📁 Project Structure
 - `index.html` – Home page
-- `weather.html` – Current weather display
 - `about.html` – Info on StormSense
 - `contact.html` – Contact form
-- `styles.css` – Custom styles
-- `script.js` – Live weather logic
+- `script.html` – Live weather logic
 
 ## 🧠 AI/ML Component
-(If you’ve added predictions or AI-based alerts, describe here)
+Predictions are based on geolocation which are gathered by AI
 
 ## 💡 Inspiration
-Made as part of an AI + Climate Action project for school 🚀
+Made as part of an AI + Climate Action project for college 🚀
 
 ## 📞 Contact
-[Your email or social link]
+email sohabhavsar@gmail.com
