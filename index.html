@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StormSense – Climate AI App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #0a0f1c, #111933);
+      color: #ffffff;
+    }
+    header {
+      background-color: #111933;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+    .logo {
+      font-size: 28px;
+      color: #00c3ff;
+      font-weight: bold;
+    }
+    nav a {
+      color: #ddd;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    .hero {
+      text-align: center;
+      height: 100vh;
+      background: url('https://picsum.photos/seed/hero/1200/500') no-repeat left center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .hero h1 {
+      font-size: 48px;
+      color: #00c3ff;
+      text-shadow: 2px 2px 8px #000;
+    }
+    .hero p {
+      font-size: 20px;
+      color: #eee;
+      margin: 20px 0;
+    }
+    .hero button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #00c3ff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
+    }
+    button:hover {
+      background: #00e5ff;
+      box-shadow: 0 0 15px #00e5ff;
+      transform: scale(1.05);
+    }
+    .section {
+      padding: 60px 30px;
+      text-align: center;
+    }
+    .section h2 {
+      font-size: 36px;
+      margin-bottom: 30px;
+      color: #00c3ff;
+    }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .card {
+      background: #1b233a;
+      padding: 20px;
+      border-radius: 15px;
+      width: 280px;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card i {
+      font-size: 40px;
+      color: #00c3ff;
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 15px;
+      color: #ccc;
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #0a0f1c;
+      font-size: 14px;
+      color: #aaa;
+    }
+    @media (max-width: 768px) {
+      .cards {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => AOS.init());
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">⚡ StormSense</div>
+    <nav>
+     <nav>
+     <a href="script.html" style="color:white; margin: 0 15px;">Current Weather</a>
+  
+  <a href="contact.html" style="color:white; margin: 0 15px;">Contact</a>
+  <a href="about.html" style="color:white; margin: 0 15px;">About</a>
+ 
+</nav>
+
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1 data-aos="fade-down">StormSense</h1>
+    <p data-aos="fade-up" style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 30px; color: #ffffff; background-color: rgba(0, 0, 0, 0.5); padding: 10px 20px; border-radius: 10px; text-shadow: 2px 2px 4px #000;">AI That Predicts Climate Disasters Before They Strike</p>
+    <button data-aos="zoom-in">Get Started</button>
+  </section>
+
+  <section class="section" id="features">
+    <h2>Key Features</h2>
+    <div class="cards">
+      <div class="card" data-aos="zoom-in" onclick="document.getElementById('weather').openIntoView({ behavior: 'smooth' });" style="cursor: pointer;">
+        <img src="https://play-lh.googleusercontent.com/7E1O4q1z4JJ9sv-GogJifsPQrArZvXQsI3CkU_aMXYUXFQRg8dD0Z7WbyHuCYz9dwNI=w526-h296-rw" alt="Real-time Data"/>
+        <i class="fas fa-cloud"></i>
+        <h3>Real-time Data</h3>
+        <p>Uses live weather data to detect potential threats early.</p>
+      </div>
+      <div class="card" data-aos="zoom-in">
+        <img src="https://highways.today/wp-content/uploads/2024/09/AI-Weather-Forecasting.jpg" alt="AI Intelligence"/>
+        <i class="fas fa-brain"></i>
+        <h3>AI Intelligence</h3>
+        <p>Machine learning model predicts patterns of heatwaves, floods, and droughts.</p>
+      </div>
+      <div class="card" data-aos="zoom-in">
+        <img src="https://www.shutterstock.com/image-vector/mobile-weather-app-interface-design-260nw-2281393787.jpg" alt="Instant Alerts"/>
+        <i class="fas fa-bolt"></i>
+        <h3>Instant Alerts</h3>
+        <p>Sends early warnings with clear, simple action steps.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="impact" data-aos="fade-up">
+    <h2>Why It Matters</h2>
+    <div class="cards">
+      <div class="card" data-aos="zoom-in">
+        <img src="https://picsum.photos/seed/impact1/400/150" alt="Environmental Protection"/>
+        <i class="fas fa-tree"></i>
+        <h3>Environmental Protection</h3>
+        <p>Helps communities act fast and prevent disaster-related damage.</p>
+      </div>
+      <div class="card" data-aos="zoom-in">
+        <img src="https://storage.googleapis.com/gweb-cloudblog-publish/images/maxresdefault_0ihPWqs.max-1300x1300.jpg" alt="Education Friendly"/>
+        <i class="fas fa-school"></i>
+        <h3>Education Friendly</h3>
+        <p>Designed for schools and students to promote climate awareness.</p>
+      </div>
+      <div class="card" data-aos="zoom-in">
+        <img src="https://picsum.photos/seed/impact3/400/150" alt="Community Ready"/>
+        <i class="fas fa-users"></i>
+        <h3>Community Ready</h3>
+        <p>Easy for local bodies, NGOs, and residents to adopt and use.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="section" id="weather" style="scroll-margin-top: 100px;">
+ 
+    </section>
+    <footer>
+    <p>&copy; 2025 StormSense. All rights reserved.</p>
+  </footer>
+   
+<script>
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+      duration: 1200,
+      once: true
+    });
+  </script>

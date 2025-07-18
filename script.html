@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StormSense – AI Weather Forecast & Alerts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      margin: 0;
+      padding: 0;
+      color: #333;
+      animation: fadeIn 1.2s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    header {
+      background-color: #003366;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      animation: slideDown 1s ease;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .container {
+      padding: 20px;
+    }
+    .weather-box, .forecast, .alerts, .subscribe {
+      background: #fff;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      animation: popUp 0.8s ease;
+    }
+    @keyframes popUp {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .forecast-cards {
+      display: flex;
+      justify-content: space-around;
+    }
+    .card {
+      background-color: #e0f7fa;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      width: 30%;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .subscribe input, .subscribe button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 5px;
+    }
+    .subscribe button {
+      background-color: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .subscribe button:hover {
+      background-color: #004d40;
+    }
+    .background-image {
+      background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');
+      background-size: cover;
+      background-position: center;
+      padding: 50px;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>StormSense 🌩️</h1>
+    <p>Your AI Weather Forecast & Disaster Alert Companion</p>
+  </header>
+ 
+  <div class="container">
+    <div class="background-image">
+      <h2>Stay One Step Ahead of the Storm</h2>
+      <p>Real-time weather. Smart AI alerts. Safety first.</p>
+    </div>
+
+    <div class="weather-box">
+      <h2>Current Weather in Your Location</h2>
+      <p id="weather">Loading weather data...</p>
+    </div>
+
+    <div class="forecast">
+      <h2>3-Day Forecast</h2>
+      <div class="forecast-cards">
+        <div class="card" id="day1">🌤️ Sunny<br><img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" width="50"></div>
+        <div class="card" id="day2">🌬️ Windy<br><img src="https://cdn-icons-png.flaticon.com/512/1116/1116453.png" width="50"></div>
+        <div class="card" id="day3">🌦️ Thunderstorms<br><img src="https://cdn-icons-png.flaticon.com/512/1146/1146869.png" width="50"></div>
+      </div>
+    </div>
+
+    <div class="alerts">
+      <h2>AI Alerts</h2>
+      <p id="alertMsg">No current alerts 🚫</p>
+    </div>
+
+    <div class="subscribe">
+      <h2>Get Alerts by Email</h2>
+      <input type="text" placeholder="Your Name" />
+      <input type="email" placeholder="Your Email" />
+      <button>Subscribe</button>
+    </div>
+  </div>
+
+  <script>
+    const apiKey = '76d6a221cca01334aab70becc0838828';
+
+    function fetchWeatherByCoords(lat, lon) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const temp = data.main.temp;
+          const wind = data.wind.speed;
+          const desc = data.weather[0].description;
+          const icon = data.weather[0].icon;
+          const iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+
+          document.getElementById('weather').innerHTML = `
+            <strong>City:</strong> ${data.name}<br>
+            <strong>Temperature:</strong> ${temp}°C<br>
+            <strong>Wind Speed:</strong> ${wind} m/s<br>
+            <strong>Condition:</strong> ${desc}<br>
+            <img src="${iconUrl}" alt="weather icon">
+          `;
+
+          if (temp > 38 || wind > 15) {
+            document.getElementById('alertMsg').textContent = '⚠️ Warning: Extreme weather detected. Stay safe!';
+          } else {
+            document.getElementById('alertMsg').textContent = '✅ Weather is stable.';
+          }
+        })
+        .catch(error => {
+          document.getElementById('weather').textContent = 'Failed to load weather data.';
+        });
+    }
+
+    function loadForecast(){
+      
+    }
+
+    function getLocationAndFetchWeather() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            fetchWeatherByCoords(lat, lon);
+          },
+          error => {
+            document.getElementById('weather').textContent = 'Geolocation not allowed. Cannot fetch weather.';
+          }
+        );
+      } else {
+        document.getElementById('weather').textContent = 'Geolocation not supported by this browser.';
+      }
+    }
+
+    getLocationAndFetchWeather();
+    loadForecast();
+  </script>
+</body>
+</html>
