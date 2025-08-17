@@ -46,6 +46,7 @@
     .forecast-cards {
       display: flex;
       justify-content: space-around;
+      flex-wrap: wrap;
     }
     .card {
       background-color: #e0f7fa;
@@ -53,10 +54,20 @@
       border-radius: 8px;
       text-align: center;
       width: 30%;
+      margin-bottom: 10px;
       transition: transform 0.3s;
     }
     .card:hover {
       transform: scale(1.05);
+    }
+    @media (max-width: 768px) {
+      .forecast-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+      .card {
+        width: 80%;
+      }
     }
     .subscribe input, .subscribe button {
       padding: 10px;
@@ -84,6 +95,18 @@
       border-radius: 10px;
       margin: 20px 0;
     }
+    /* 🔴 Blinking LIVE badge */
+    .live-badge {
+      display: inline-block;
+      margin-left: 10px;
+      color: red;
+      font-weight: bold;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -106,15 +129,15 @@
     <div class="forecast">
       <h2>3-Day Forecast</h2>
       <div class="forecast-cards">
-        <div class="card" id="day1">🌤️ Sunny<br><img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" width="50"></div>
-        <div class="card" id="day2">🌬️ Windy<br><img src="https://cdn-icons-png.flaticon.com/512/1116/1116453.png" width="50"></div>
-        <div class="card" id="day3">🌦️ Thunderstorms<br><img src="https://cdn-icons-png.flaticon.com/512/1146/1146869.png" width="50"></div>
+        <div class="card" id="day1">Loading...</div>
+        <div class="card" id="day2">Loading...</div>
+        <div class="card" id="day3">Loading...</div>
       </div>
     </div>
 
     <div class="alerts">
-      <h2>AI Alerts</h2>
-      <p id="alertMsg">No current alerts 🚫</p>
+      <h2>AI Alerts <span class="live-badge">LIVE</span></h2>
+      <p id="alertMsg">Analyzing weather...</p>
     </div>
 
     <div class="subscribe">
@@ -127,6 +150,33 @@
 
   <script>
     const apiKey = '76d6a221cca01334aab70becc0838828';
+
+    // 🔥 AI-style alert generator
+    function generateAIAlert(temp, wind, desc) {
+      let alert = "";
+
+      if (temp > 38) {
+        alert += "🔥 Extreme heat detected! Stay hydrated & indoors. ";
+      } else if (temp < 5) {
+        alert += "🥶 Freezing cold! Bundle up if you head out. ";
+      }
+
+      if (wind > 15) {
+        alert += "💨 Strong winds! Secure loose items & avoid driving. ";
+      }
+
+      if (desc.includes("rain")) {
+        alert += "☔ Rain expected, carry an umbrella. ";
+      } else if (desc.includes("storm") || desc.includes("thunder")) {
+        alert += "⚡ Thunderstorm risk! Stay indoors & keep devices charged. ";
+      }
+
+      if (alert === "") {
+        alert = "✅ Weather looks stable right now.";
+      }
+
+      document.getElementById("alertMsg").textContent = alert;
+    }
 
     function fetchWeatherByCoords(lat, lon) {
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
@@ -147,19 +197,35 @@
             <img src="${iconUrl}" alt="weather icon">
           `;
 
-          if (temp > 38 || wind > 15) {
-            document.getElementById('alertMsg').textContent = '⚠️ Warning: Extreme weather detected. Stay safe!';
-          } else {
-            document.getElementById('alertMsg').textContent = '✅ Weather is stable.';
-          }
+          // 🔥 Generate AI Alert dynamically
+          generateAIAlert(temp, wind, desc);
         })
         .catch(error => {
           document.getElementById('weather').textContent = 'Failed to load weather data.';
         });
     }
 
-    function loadForecast(){
-      
+    function loadForecast(lat, lon) {
+      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          for (let i = 1; i <= 3; i++) {
+            const forecast = data.list[i * 8]; // ~ every 24h
+            const date = new Date(forecast.dt * 1000).toDateString();
+            const temp = forecast.main.temp;
+            const desc = forecast.weather[0].description;
+            const icon = forecast.weather[0].icon;
+
+            document.getElementById(`day${i}`).innerHTML = `
+              <strong>${date}</strong><br>
+              🌡️ ${temp}°C<br>
+              ${desc}<br>
+              <img src="http://openweathermap.org/img/wn/${icon}@2x.png" width="50">
+            `;
+          }
+        })
+        .catch(err => console.error("Forecast fetch failed:", err));
     }
 
     function getLocationAndFetchWeather() {
@@ -169,6 +235,7 @@
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             fetchWeatherByCoords(lat, lon);
+            loadForecast(lat, lon);
           },
           error => {
             document.getElementById('weather').textContent = 'Geolocation not allowed. Cannot fetch weather.';
@@ -179,8 +246,11 @@
       }
     }
 
+    // Initial fetch
     getLocationAndFetchWeather();
-    loadForecast();
+
+    // 🔄 Auto-refresh every 5 minutes
+    setInterval(getLocationAndFetchWeather, 300000);
   </script>
 </body>
 </html>
